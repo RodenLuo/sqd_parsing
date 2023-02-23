@@ -3,7 +3,6 @@
 primitives
 """
 import argparse
-from itertools import izip
 import json
 import random
 import os
@@ -87,7 +86,7 @@ def get_regularizer_terms(args, current_epoch):
 
 def save_experiment_params(args, experiment_tag, directory):
     t = vars(args)
-    params = {k: str(v) for k, v in t.iteritems()}
+    params = {k: str(v) for k, v in t.items()}
 
     git_head_hash = "foo"
     params["git-commit"] = git_head_hash
@@ -207,7 +206,7 @@ def main(argv):
     else:
         device = torch.device("cpu")
 
-    print "Running code on", device
+    print("Running code on", device)
 
     # Check if output directory exists and if it doesn't create it
     if not os.path.exists(args.output_directory):
@@ -228,7 +227,7 @@ def main(argv):
 
     # Store the parameters for the current experiment in a json file
     save_experiment_params(args, experiment_tag, experiment_directory)
-    print "Save experiment statistics in %s" %(experiment_tag, )
+    print("Save experiment statistics in %s" %(experiment_tag, ))
 
     # Create two files to store the training and test evolution
     train_stats = os.path.join(experiment_directory, "train.txt")
@@ -310,7 +309,7 @@ def main(argv):
             args.epochs,
             args.steps_per_epoch
         )
-        for b, sample in izip(range(args.steps_per_epoch), yield_infinite(train_bp)):
+        for b, sample in zip(range(args.steps_per_epoch), yield_infinite(train_bp)):
             X, y_target = sample
             X, y_target = X.to(device), y_target.to(device)
 
@@ -389,15 +388,15 @@ def main(argv):
             )
         )
 
-    print [
+    print([
         sum(losses[args.steps_per_epoch:]) / float(args.steps_per_epoch),
         sum(losses[:args.steps_per_epoch]) / float(args.steps_per_epoch),
         sum(pcl_to_prim_losses[args.steps_per_epoch:]) / float(args.steps_per_epoch),
         sum(pcl_to_prim_losses[:args.steps_per_epoch]) / float(args.steps_per_epoch),
         sum(prim_to_pcl_losses[args.steps_per_epoch:]) / float(args.steps_per_epoch),
         sum(prim_to_pcl_losses[:args.steps_per_epoch]) / float(args.steps_per_epoch),
-    ]
+    ])
 
 
 if __name__ == "__main__":
-    main(sys.argv[1:])
+    main(["E:/spd_parsing/superquadric_parsing/demo/03001627/", "/tmp/", "--use_sq", "--lr", "1e-4", "--n_primitives", "20", "--train_with_bernoulli", "--dataset_type", "shapenet_v2", "--use_chamfer", "--run_on_gpu"])

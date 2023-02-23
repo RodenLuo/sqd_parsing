@@ -4,8 +4,8 @@ import pickle
 import numpy as np
 from sympy import solve, symbols, diff, cos, sin, sign, Function, S
 
-from fast_sampler import step_eta as fast_step_eta,\
-    step_omega as fast_step_omega, collect_etas as fast_collect_etas,\
+from _sampler import step_eta as fast_step_eta, \
+    step_omega as fast_step_omega, collect_etas as fast_collect_etas, \
     collect_omegas as fast_collect_omegas, fast_sample, fast_sample_on_batch
 
 
@@ -34,7 +34,7 @@ class EqualDistanceSamplerSQ(object):
     EXPRESSION_FILE_ENV = "EXPRESSION_FILE"
 
     def __init__(self, n_samples, D_eta=0.005, D_omega=0.005,
-                 omega_initial=-np.pi+0.001, eta_initial=-np.pi/2+0.001):
+                 omega_initial=-np.pi + 0.001, eta_initial=-np.pi / 2 + 0.001):
         self._n_samples = n_samples
         self.D_eta_value = D_eta
         self.D_omega_value = D_omega
@@ -74,17 +74,17 @@ class EqualDistanceSamplerSQ(object):
         eta = kwargs.get("eta", 0)
         omega = kwargs.get("omega", 0)
 
-        t1 = (a1**2) * np.sin(omega)**4
-        t1 *= np.abs(np.cos(omega))**(2*e2)
-        t1 *= np.sign(np.cos(omega))**2
-        t1 *= np.sign(np.cos(omega))**2
+        t1 = (a1 ** 2) * np.sin(omega) ** 4
+        t1 *= np.abs(np.cos(omega)) ** (2 * e2)
+        t1 *= np.sign(np.cos(omega)) ** 2
+        t1 *= np.sign(np.cos(omega)) ** 2
 
-        t2 = (a2**2) * np.cos(omega)**4
-        t2 *= np.abs(np.sin(omega))**(2*e2)
-        t2 *= np.sign(np.sin(omega))**2
-        t2 *= np.sign(np.sin(omega))**2
+        t2 = (a2 ** 2) * np.cos(omega) ** 4
+        t2 *= np.abs(np.sin(omega)) ** (2 * e2)
+        t2 *= np.sign(np.sin(omega)) ** 2
+        t2 *= np.sign(np.sin(omega)) ** 2
 
-        t = np.sqrt(np.abs(np.cos(eta))**(-2*e1) / (t1 + t2))
+        t = np.sqrt(np.abs(np.cos(eta)) ** (-2 * e1) / (t1 + t2))
         t *= D_omega * np.sin(omega) * np.cos(omega)
         step = t / (e2 * np.sign(np.cos(eta)))
         return abs(float(step))
@@ -99,18 +99,18 @@ class EqualDistanceSamplerSQ(object):
         eta = kwargs.get("eta", 0)
         omega = kwargs.get("omega", 0)
 
-        t1 = (a1**2) * np.sin(omega)**4
-        t1 *= np.abs(np.cos(omega))**(2*e2)
-        t1 *= np.sign(np.cos(omega))**2
-        t1 *= np.sign(np.cos(omega))**2
+        t1 = (a1 ** 2) * np.sin(omega) ** 4
+        t1 *= np.abs(np.cos(omega)) ** (2 * e2)
+        t1 *= np.sign(np.cos(omega)) ** 2
+        t1 *= np.sign(np.cos(omega)) ** 2
 
-        t2 = (a2**2) * np.cos(omega)**4
-        t2 *= np.abs(np.sin(omega))**(2*e2)
-        t2 *= np.sign(np.sin(omega))**2
-        t2 *= np.sign(np.sin(omega))**2
+        t2 = (a2 ** 2) * np.cos(omega) ** 4
+        t2 *= np.abs(np.sin(omega)) ** (2 * e2)
+        t2 *= np.sign(np.sin(omega)) ** 2
+        t2 *= np.sign(np.sin(omega)) ** 2
 
         t = np.sqrt(1 / (t1 + t2))
-        t *= (D_omega * np.sin(omega)*np.cos(omega)) / e2
+        t *= (D_omega * np.sin(omega) * np.cos(omega)) / e2
         return abs(float(t))
 
     def step_omega_superellipsoid_zero_omega(self, **kwargs):
@@ -149,26 +149,26 @@ class EqualDistanceSamplerSQ(object):
         eta = kwargs.get("eta", 0)
         omega = kwargs.get("omega", 0)
 
-        t1 = (a1**2) * np.sin(eta)**4
-        t1 *= np.abs(np.cos(eta))**(2*e1)
-        t1 *= np.abs(np.cos(omega))**(2*e2)
-        t1 *= np.sign(np.cos(eta))**2
-        t1 *= np.sign(np.cos(omega))**2
-        t1 *= np.sign(np.cos(eta))**2
+        t1 = (a1 ** 2) * np.sin(eta) ** 4
+        t1 *= np.abs(np.cos(eta)) ** (2 * e1)
+        t1 *= np.abs(np.cos(omega)) ** (2 * e2)
+        t1 *= np.sign(np.cos(eta)) ** 2
+        t1 *= np.sign(np.cos(omega)) ** 2
+        t1 *= np.sign(np.cos(eta)) ** 2
 
-        t2 = (a2**2)*(np.sin(eta)**4)
-        t2 *= np.abs(np.sin(omega))**(2*e2)
-        t2 *= np.abs(np.cos(eta))**(2*e1)
-        t2 *= np.sign(np.sin(omega))**2
-        t2 *= np.sign(np.cos(eta))**2
-        t2 *= np.sign(np.cos(eta))**2
+        t2 = (a2 ** 2) * (np.sin(eta) ** 4)
+        t2 *= np.abs(np.sin(omega)) ** (2 * e2)
+        t2 *= np.abs(np.cos(eta)) ** (2 * e1)
+        t2 *= np.sign(np.sin(omega)) ** 2
+        t2 *= np.sign(np.cos(eta)) ** 2
+        t2 *= np.sign(np.cos(eta)) ** 2
 
-        t3 = (a3**2)*(np.cos(eta)**4)
-        t3 *= np.abs(np.sin(eta))**(2*e1)
-        t3 *= np.sign(np.sin(eta))**2
-        t3 *= np.sign(np.sin(eta))**2
+        t3 = (a3 ** 2) * (np.cos(eta) ** 4)
+        t3 *= np.abs(np.sin(eta)) ** (2 * e1)
+        t3 *= np.sign(np.sin(eta)) ** 2
+        t3 *= np.sign(np.sin(eta)) ** 2
 
-        t = np.sqrt(1.0 / (t1 + t2 + t3))*np.sin(eta)*np.cos(eta)
+        t = np.sqrt(1.0 / (t1 + t2 + t3)) * np.sin(eta) * np.cos(eta)
         step = D_eta * (t / e1)
         return abs(float(step))
 
@@ -182,15 +182,15 @@ class EqualDistanceSamplerSQ(object):
         eta = kwargs.get("eta", 0)
         omega = kwargs.get("omega", 0)
 
-        t1 = (a3**2)*(np.cos(eta)**4)
-        t1 *= np.abs(np.sin(eta))**(2*e1)
-        t1 *= np.sign(np.sin(eta))**2
-        t1 *= np.sign(np.sin(eta))**2
+        t1 = (a3 ** 2) * (np.cos(eta) ** 4)
+        t1 *= np.abs(np.sin(eta)) ** (2 * e1)
+        t1 *= np.sign(np.sin(eta)) ** 2
+        t1 *= np.sign(np.sin(eta)) ** 2
 
-        t2 = np.sin(eta)**4
-        t2 *= np.abs(np.cos(eta))**(2*e1)
-        t2 *= np.sign(np.cos(eta))**2
-        t2 *= np.sign(np.cos(eta))**2
+        t2 = np.sin(eta) ** 4
+        t2 *= np.abs(np.cos(eta)) ** (2 * e1)
+        t2 *= np.sign(np.cos(eta)) ** 2
+        t2 *= np.sign(np.cos(eta)) ** 2
 
         t = np.sqrt(1 / (t1 + t2))
         t *= (D_eta * np.sin(eta) * np.cos(eta)) / e1
@@ -240,7 +240,7 @@ class EqualDistanceSamplerSQ(object):
         def inner(eta_initial_value, **kwargs):
             eta_value = eta_initial_value
             etas = []
-            while eta_value < np.pi/2:
+            while eta_value < np.pi / 2:
                 etas.append(eta_value)
                 kwargs.update(eta=eta_value)
                 eta_value += fast_step_eta(
@@ -261,9 +261,9 @@ class EqualDistanceSamplerSQ(object):
             diff = np.array(etas[1:]) - np.array(etas[:-1])
             c1 = np.max(diff) > C
             # Make sure that the first sampled eta will be close to np.pi/2
-            c2 = np.round(np.abs(etas[0] + np.pi/2), 3) > C
+            c2 = np.round(np.abs(etas[0] + np.pi / 2), 3) > C
             # Make sure that the last sampled eta will be close to np.pi/2
-            c3 = np.abs(etas[-1] - np.pi/2) > 0.01
+            c3 = np.abs(etas[-1] - np.pi / 2) > 0.01
             return c1 or c2 or c3
 
         key = self._get_key(**kwargs)
@@ -311,27 +311,27 @@ class EqualDistanceSamplerSQ(object):
     def _sample_superellipse_divide_conquer(self, theta_lim, a1, a2, e, N):
         def xy(theta):
             return np.array([
-                a1*fexp(np.cos(theta), e),
-                a2*fexp(np.sin(theta), e)
+                a1 * fexp(np.cos(theta), e),
+                a2 * fexp(np.sin(theta), e)
             ])
 
         def get_sample(wA, wB, A, B, N, ident=""):
             if N <= 0:
                 return
-            w = (wA + wB)/2
+            w = (wA + wB) / 2
             C = xy(w)
-            dA = np.sqrt(((A-C)**2).sum())
-            dB = np.sqrt(((C-B)**2).sum())
-            nA = int((dA/(dA+dB))*(N-1))
-            nB = N-nA-1
-            for t in get_sample(wA, w, A, C, nA, ident+"l"):
+            dA = np.sqrt(((A - C) ** 2).sum())
+            dB = np.sqrt(((C - B) ** 2).sum())
+            nA = int((dA / (dA + dB)) * (N - 1))
+            nB = N - nA - 1
+            for t in get_sample(wA, w, A, C, nA, ident + "l"):
                 yield t
             yield w
-            for t in get_sample(w, wB, C, B, nB, ident+"r"):
+            for t in get_sample(w, wB, C, B, nB, ident + "r"):
                 yield t
 
         w1, w2 = theta_lim
-        return [w1] + list(get_sample(w1, w2, xy(w1), xy(w2), N-2)) + [w2]
+        return [w1] + list(get_sample(w1, w2, xy(w1), xy(w2), N - 2)) + [w2]
 
     def _get_etas_divide_conquer(self, **kwargs):
         e1 = kwargs.get("eps1", 0.25)
@@ -341,7 +341,7 @@ class EqualDistanceSamplerSQ(object):
         a3 = kwargs.get("a3", 0.25)
 
         etas = self._sample_superellipse_divide_conquer(
-            [np.pi/2, -np.pi/2],
+            [np.pi / 2, -np.pi / 2],
             a1, a3,
             e1,
             201
@@ -364,15 +364,15 @@ class EqualDistanceSamplerSQ(object):
         return np.array(omegas)
 
     def _get_etas_omegas_divide_conquer(self, **kwargs):
-        return self._get_etas_divide_conquer(**kwargs),  \
-            self._get_omegas_divide_conquer(**kwargs)
+        return self._get_etas_divide_conquer(**kwargs), \
+               self._get_omegas_divide_conquer(**kwargs)
 
     def _sample(self, **kwargs):
         etas, omegas = self._get_etas_omegas_divide_conquer(**kwargs)
 
         # Do random sampling
         idxs = np.random.choice(
-            etas.size*omegas.size, self.n_samples, replace=False
+            etas.size * omegas.size, self.n_samples, replace=False
         )
         idxs_unraveled = np.unravel_index(idxs, (etas.size, omegas.size))
         etas = etas[idxs_unraveled[0]]
@@ -398,26 +398,26 @@ class EqualDistanceSamplerSQ(object):
         )
 
     def _get_key(self, **kwargs):
-            a1 = kwargs.get("a1", 0.25)
-            a2 = kwargs.get("a2", 0.25)
-            a3 = kwargs.get("a3", 0.25)
-            e1 = kwargs.get("eps1", 0.25)
-            e2 = kwargs.get("eps2", 0.25)
+        a1 = kwargs.get("a1", 0.25)
+        a2 = kwargs.get("a2", 0.25)
+        a3 = kwargs.get("a3", 0.25)
+        e1 = kwargs.get("eps1", 0.25)
+        e2 = kwargs.get("eps2", 0.25)
 
-            # Since a1-3 values are from 0.01-0.51 this gives a maximum of 11
-            # values for each. We do the same for e1, e2 whic are from 0.2-1.8
-            # thus 11**5 total values
-            return (
-                int(20*a1),
-                int(20*a2),
-                int(20*a3),
-                int(10*(e1-0.2)/1.6),
-                int(10*(e2-0.2)/1.6)
-            )
+        # Since a1-3 values are from 0.01-0.51 this gives a maximum of 11
+        # values for each. We do the same for e1, e2 whic are from 0.2-1.8
+        # thus 11**5 total values
+        return (
+            int(20 * a1),
+            int(20 * a2),
+            int(20 * a3),
+            int(10 * (e1 - 0.2) / 1.6),
+            int(10 * (e2 - 0.2) / 1.6)
+        )
 
     @staticmethod
     def fexp(x, p):
-        return my_sign(x)*(abs(x)**p)
+        return my_sign(x) * (abs(x) ** p)
 
     @staticmethod
     def get_step_expressions():
@@ -457,14 +457,14 @@ class EqualDistanceSamplerSQ(object):
                 t3 = a3 * EqualDistanceSamplerSQ.fexp(sin(eta), e1)
 
                 step_eta_expr = solve(
-                    (diff(t1, eta)*d_eta)**2 + (diff(t2, eta)*d_eta)**2 +
-                    (diff(t3, eta)*d_eta)**2 - D_eta**2,
+                    (diff(t1, eta) * d_eta) ** 2 + (diff(t2, eta) * d_eta) ** 2 +
+                    (diff(t3, eta) * d_eta) ** 2 - D_eta ** 2,
                     d_eta
                 )[1]
                 step_omega_expr = solve(
-                    (diff(t1, omega)*d_omega)**2 +
-                    (diff(t2, omega)*d_omega)**2 +
-                    (diff(t3, omega)*d_omega)**2 - D_omega**2,
+                    (diff(t1, omega) * d_omega) ** 2 +
+                    (diff(t2, omega) * d_omega) ** 2 +
+                    (diff(t3, omega) * d_omega) ** 2 - D_omega ** 2,
                     d_omega
                 )[1]
                 EqualDistanceSamplerSQ.step_expressions = (
@@ -505,7 +505,7 @@ def get_sampler(use_cuboids, n_samples, D_eta, D_omega):
 
 
 def fexp(x, p):
-    return np.sign(x)*(np.abs(x)**p)
+    return np.sign(x) * (np.abs(x) ** p)
 
 
 def sq_surface(a1, a2, a3, e1, e2, eta, omega):
@@ -516,7 +516,7 @@ def sq_surface(a1, a2, a3, e1, e2, eta, omega):
 
 
 def visualize_points_on_sq_mesh(e, **kwargs):
-    print kwargs
+    print(kwargs)
     e1 = kwargs.get("eps1", 0.25)
     e2 = kwargs.get("eps2", 0.25)
     a1 = kwargs.get("a1", 0.25)

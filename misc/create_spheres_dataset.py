@@ -80,7 +80,7 @@ def main(argv):
         args.output_directory,
         "spheres_dataset"
     )
-    print "Saving models to %s" % (output_directory,)
+    print("Saving models to %s" % (output_directory,))
 
     prog = Progbar(args.n_samples)
     for i in range(args.n_samples):

@@ -191,9 +191,9 @@ if __name__ == "__main__":
             False
         )
         loss.backward()
-        print "It: %d - loss: %f - cnst_loss:%f - cvrg_loss:%f" %(
+        print("It: %d - loss: %f - cnst_loss:%f - cvrg_loss:%f" %(
             k, loss, debug_stats[-1], debug_stats[-2]
-        )
+        ))
 
         if (k % 10) == 0:
             fig = plt.figure(figsize=(4, 3))

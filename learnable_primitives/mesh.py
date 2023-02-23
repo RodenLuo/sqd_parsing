@@ -41,7 +41,7 @@ class Mesh(object):
 
     @staticmethod
     def get_face_normals_from_file(mesh_file):
-        m = trimesh.load(mesh_file)
+        m = trimesh.load(mesh_file, force="mesh")
         # Make sure that the face orinetations are ok
         trimesh.repair.fix_normals(m, multibody=True)
         trimesh.repair.fix_winding(m)
@@ -374,7 +374,7 @@ class Trimesh(Mesh):
     @property
     def mesh(self):
         if self._mesh is None:
-            self._mesh = trimesh.load(self.mesh_file)
+            self._mesh = trimesh.load(self.mesh_file, force="mesh")
             # Make sure that the face orinetations are ok
             # trimesh.repair.fix_normals(self.mesh, multibody=True)
             # trimesh.repair.fix_winding(self.mesh)

@@ -180,7 +180,7 @@ class ConvexShape(Shape):
         return self._faces_idxs
 
     def _make_consistent_orientation_of_faces(self):
-        for i, face_idxs in zip(xrange(self.cv.nsimplex), self.faces_idxs):
+        for i, face_idxs in zip(range(self.cv.nsimplex), self.faces_idxs):
             # Compute the orientation for the current face
             orientation = Shape.get_orientation_of_face(self.points, face_idxs)
             if orientation < 0:
