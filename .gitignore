@@ -19,3 +19,6 @@ build/
 
 scripts/learnable_primitives
 misc/learnable_primitives
+.idea/superquadric_parsing.iml
+.idea/misc.xml
+.idea/deployment.xml
