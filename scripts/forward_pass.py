@@ -6,6 +6,8 @@ import argparse
 import os
 import sys
 
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 import numpy as np
 import torch
 from torch.utils.data import DataLoader
@@ -28,7 +30,7 @@ from learnable_primitives.primitives import\
     euler_angles_to_rotation_matrices, quaternions_to_rotation_matrices
 from learnable_primitives.voxelizers import VoxelizerFactory
 
-from mayavi import mlab
+#from mayavi import mlab
 
 
 def get_shape_configuration(use_cuboids):
@@ -39,6 +41,7 @@ def get_shape_configuration(use_cuboids):
 
 
 def main(argv):
+    print("2")
     parser = argparse.ArgumentParser(
         description="Do the forward pass and estimate a set of primitives"
     )
@@ -101,6 +104,8 @@ def main(argv):
     add_loss_parameters(parser)
     add_loss_options_parameters(parser)
     args = parser.parse_args(argv)
+
+    print(args)
 
     # A sampler instance
     e = EqualDistanceSamplerSQ(200)
@@ -186,8 +191,8 @@ def main(argv):
         pts = pts.squeeze().detach().numpy().T
 
         on_prims = 0
-        fig = mlab.figure(size=(400, 400), bgcolor=(1, 1, 1))
-        mlab.view(azimuth=0.0, elevation=0.0, distance=2)
+ #       fig = mlab.figure(size=(400, 400), bgcolor=(1, 1, 1))
+ #       mlab.view(azimuth=0.0, elevation=0.0, distance=2)
         # Uncomment to visualize the points sampled from the target mesh
         # t = np.array([1.2, 0, 0]).reshape(3, -1)
         # pts_n = pts + t
@@ -229,13 +234,13 @@ def main(argv):
             )
             if probs[0, i] >= args.prob_threshold:
                 on_prims += 1
-                mlab.mesh(
-                    x_tr,
-                    y_tr,
-                    z_tr,
-                    color=tuple(colors[i % len(colors)]),
-                    opacity=1.0
-                )
+  #              mlab.mesh(
+  #                  x_tr,
+  #                  y_tr,
+  #                  z_tr,
+  #                  color=tuple(colors[i % len(colors)]),
+  #                  opacity=1.0
+  #              )
                 primitive_files.append(
                     os.path.join(args.output_directory, "primitive_%d.p" % (i,))
                 )
@@ -244,18 +249,18 @@ def main(argv):
             cnt = 0
             for az in range(0, 360, 1):
                 cnt += 1
-                mlab.view(azimuth=az, elevation=0.0, distance=2)
-                mlab.savefig(
-                    os.path.join(
-                        args.output_directory,
-                        "img_%04d.png" % (cnt,)
-                    )
-                )
+#                mlab.view(azimuth=az, elevation=0.0, distance=2)
+#                mlab.savefig(
+#                    os.path.join(
+#                        args.output_directory,
+#                        "img_%04d.png" % (cnt,)
+#                    )
+#                )
         for i in range(args.n_primitives):
             print(i, probs[0, i])
 
         print("Using %d primitives out of %d" % (on_prims, args.n_primitives))
-        mlab.show()
+        #mlab.show()
 
         if args.save_prediction_as_mesh:
             print("Saving prediction as mesh....")
@@ -269,16 +274,18 @@ def main(argv):
 
 
 if __name__ == "__main__":
-    main(["../demo/03001627/",
-          "/tmp/",
-          "--model_tag",
-          "\"dac4af24e2facd7d3000ca4b04fcd6ac\"",
-          "--n_primitives",
-          "18",
-          "--weight_file",
-          "../config/chair_T26AK2FES_model_699",
-          "--train_with_bernoulli",
-          "--use_deformations",
-          "--use_sq",
-          "--dataset_type",
-          "shapenet_v2"])
+    print("1")
+    main(sys.argv[1:])
+    # main(["../demo/03001627/",
+    #      "/tmp/",
+    #      "--model_tag",
+    #      "\"dac4af24e2facd7d3000ca4b04fcd6ac\"",
+    #      "--n_primitives",
+    #      "18",
+    #      "--weight_file",
+    #      "../config/chair_T26AK2FES_model_699",
+    #      "--train_with_bernoulli",
+    #      "--use_deformations",
+    #      "--use_sq",
+    #      "--dataset_type",
+    #      "shapenet_v2"])

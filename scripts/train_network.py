@@ -9,6 +9,8 @@ import os
 import string
 import sys
 
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 import numpy as np
 import torch
 
@@ -36,7 +38,7 @@ def moving_average(prev_val, new_val, b):
 
 
 def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
-   return ''.join(random.choice(chars) for _ in range(size))
+    return ''.join(random.choice(chars) for _ in range(size))
 
 
 def yield_infinite(iterable):
@@ -399,4 +401,4 @@ def main(argv):
 
 
 if __name__ == "__main__":
-    main(["E:/spd_parsing/superquadric_parsing/demo/03001627/", "/tmp/", "--use_sq", "--lr", "1e-4", "--n_primitives", "20", "--train_with_bernoulli", "--dataset_type", "shapenet_v2", "--use_chamfer", "--run_on_gpu"])
+    main(sys.argv[1:])

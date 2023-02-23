@@ -13,7 +13,9 @@ def build_ext():
                         "learnable_primitives/fast_sampler/sampling.cpp"
                     ],
                     language="c++11",
+                    libraries=["stdc++"],
                     include_dirs=[np.get_include()],
+                    extra_compile_args=["-std=c++11", "-O3"]
                     )
     setup(ext_modules=cythonize(ext))
 
